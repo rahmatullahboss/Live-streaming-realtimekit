@@ -1,69 +1,74 @@
 # Live Streaming RealtimeKit
 
-A browser/mobile-first live production system inspired by StreamYard, designed for field sports and live shows.
+Browser/mobile-first live production system inspired by StreamYard, designed for field sports and live shows.
 
 ## Core Goal
 
-Mobile camera operators join from browser/mobile. A mobile director controls scenes, scoreboards, overlays, and final output. A cloud-side compositor renders the final program feed and exports it to YouTube/Facebook via RTMP.
+Mobile cameras join from browser. A mobile director controls scenes, score, graphics, and stream state. A custom recording layout renders the final stream with graphics and sends it to YouTube/Facebook through RealtimeKit export.
 
 ```txt
 Mobile Camera 1 ┐
-Mobile Camera 2 ├── WebRTC → RealtimeKit / SFU
+Mobile Camera 2 ├── WebRTC → RealtimeKit meeting
 Mobile Camera 3 ┘
                         ↓
-Director Mobile Dashboard
-controls scene/layout/score/overlay
+Director route
+controls camera/layout/score/graphics
                         ↓
-Cloud Compositor / Custom Recording App
-HTML/CSS overlay + selected camera layout
+/compositor/:eventId
+custom recording layout with scoreboard and graphics
                         ↓
-RTMP Export
+RealtimeKit export
                         ↓
-YouTube / Facebook
+YouTube / Facebook RTMP
 ```
 
-## MVP Scope
+## Stack
 
-1. Create event
-2. Generate camera join links
-3. Generate director link
-4. Camera operators publish mobile video/audio
-5. Director sees previews and switches active camera/layout
-6. Scoreboard and overlay updates in real time
-7. Compositor page renders the final 16:9 output
-8. Export final stream to RTMP destination
+This repo follows the source compositor project style, not Next.js.
 
-## Suggested Stack
+- Frontend: React Router + Vite
+- Backend: Cloudflare Worker + Hono
+- Realtime layer: Cloudflare RealtimeKit
+- Graphics: reusable overlay engine package
+- Shared state types: shared package
 
-- Frontend: Next.js / React
-- Realtime video: Cloudflare RealtimeKit
-- Backend: Node.js / Express or Next.js API routes
-- State sync: WebSocket or Server-Sent Events
-- Overlay: HTML/CSS/Canvas-based compositor UI
-- Storage: PostgreSQL or SQLite for MVP
+## Routes
 
-## Apps
+```txt
+/camera
+/director/:eventId
+/compositor/:eventId
+/score/:eventId
+```
+
+## Backend API Skeleton
+
+```txt
+GET  /api/health
+POST /api/events/:eventId/participants
+POST /api/events/:eventId/recording/start
+```
+
+## Workspace
 
 ```txt
 apps/web
-  camera page
-  director dashboard
-  compositor page
+  React Router frontend
+  Cloudflare Worker backend
 
-apps/api
-  event API
-  participant token API
-  overlay/layout state API
+packages/shared
+  Event, camera, program, and overlay types
+
+packages/overlay-engine
+  Scoreboard, ticker, logo, sponsor, and external graphics layer
 ```
 
-## Key Concept
-
-Do not use only relay/restream. Relay cannot burn overlays into the video. The final stream must be created by a cloud-side compositor page that renders camera tracks and overlay elements together.
-
-## First POC Target
+## POC Target
 
 - 2 mobile cameras
 - 1 mobile director
-- switch between camera 1 and camera 2
-- show scoreboard overlay
-- verify compositor/recording output includes overlay
+- camera join token flow
+- director token flow
+- scoreboard and external graphics support
+- custom RealtimeKit recording layout URL
+- RTMP export test

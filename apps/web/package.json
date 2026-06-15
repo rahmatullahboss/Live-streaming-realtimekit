@@ -3,29 +3,37 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "build": "react-router build",
+    "cf-typegen": "wrangler types",
+    "deploy": "npm run build && wrangler deploy",
+    "dev": "react-router dev",
+    "preview": "npm run build && vite preview",
+    "typecheck": "react-router typegen && tsc -b"
   },
   "dependencies": {
     "@cloudflare/realtimekit": "latest",
     "@cloudflare/realtimekit-react": "latest",
     "@cloudflare/realtimekit-react-ui": "latest",
     "@cloudflare/realtimekit-ui": "latest",
-    "next": "latest",
+    "@hono/zod-validator": "^0.7.6",
+    "hono": "^4.12.14",
+    "lucide-react": "^1.7.0",
     "overlay-engine": "workspace:*",
     "react": "latest",
     "react-dom": "latest",
-    "shared": "workspace:*"
+    "react-router": "latest",
+    "shared": "workspace:*",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "latest",
+    "@react-router/dev": "latest",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "eslint": "latest",
-    "eslint-config-next": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "vite": "latest",
+    "vite-tsconfig-paths": "latest",
+    "wrangler": "latest"
   }
 }

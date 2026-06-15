@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { registerStreamRoutes } from "./stream-api";
 
 export type Env = {
   CLOUDFLARE_ACCOUNT_ID: string;
@@ -76,5 +77,7 @@ apiApp.post("/api/events/:eventId/participants", async (c) => {
   });
   return c.json({ meetingId, participant, token: (participant as any).token });
 });
+
+registerStreamRoutes(apiApp);
 
 export default apiApp;

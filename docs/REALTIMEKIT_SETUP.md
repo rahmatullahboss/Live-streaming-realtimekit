@@ -1,15 +1,17 @@
-# RealtimeKit Setup Plan
+# RealtimeKit Only Setup
 
 ## Direction
 
-Use the existing React Router style frontend from the compositor project. Do not convert the UI to Next.js.
+This repo uses RealtimeKit for the complete live production path. No relay VPS, no ffmpeg VPS, and no separate compositor VPS are part of the primary architecture.
 
-RealtimeKit is used for the meeting/session layer:
+## Flow
 
-- camera participant token
-- director participant token
-- recorder/custom recording participant
-- recording or livestream export with custom layout URL
+```txt
+Camera browser -> RealtimeKit meeting
+Director browser -> RealtimeKit meeting + control UI
+Custom layout URL -> /compositor/:eventId?token=RECORDER_TOKEN
+RealtimeKit recording/export -> YouTube or Facebook RTMP
+```
 
 ## Frontend Routes
 
@@ -24,8 +26,10 @@ RealtimeKit is used for the meeting/session layer:
 
 ```txt
 GET  /api/health
+POST /api/events
 POST /api/events/:eventId/participants
 POST /api/events/:eventId/recording/start
+POST /api/recordings/:recordingId/stop
 ```
 
 ## Required Environment
@@ -34,25 +38,25 @@ POST /api/events/:eventId/recording/start
 CLOUDFLARE_ACCOUNT_ID=
 CLOUDFLARE_REALTIMEKIT_APP_ID=
 CLOUDFLARE_API_TOKEN=
+PUBLIC_APP_URL=https://your-domain.com
 REALTIMEKIT_CAMERA_PRESET_NAME=camera
 REALTIMEKIT_DIRECTOR_PRESET_NAME=director
 REALTIMEKIT_RECORDER_PRESET_NAME=recorder
 ```
 
-## Implementation Notes
+## API Mapping
 
-1. Create a meeting for each event.
-2. Add camera participants with camera preset and return authToken.
-3. Add director participant with director preset and return authToken.
-4. Start recording or livestream export with the custom URL:
+- Create event -> RealtimeKit Create Meeting API
+- Create camera/director/recorder token -> RealtimeKit Add Participant API
+- Start RTMP stream -> RealtimeKit Start Recording API with `meeting_id`, `url`, and `rtmp_out_config.rtmp_url`
+- Stop stream -> RealtimeKit Stop Recording API
+
+## Custom Layout URL
+
+When streaming starts, the backend creates a recorder participant token and generates this URL:
 
 ```txt
-https://your-domain.com/compositor/:eventId
+https://your-domain.com/compositor/:eventId?token=RECORDER_TOKEN
 ```
 
-5. The custom URL must render the selected camera layout plus overlay graphics.
-6. Score route updates overlay state used by the compositor route.
-
-## Why custom recording URL is required
-
-Relay alone forwards video but does not render scoreboard, logos, banners, ticker, or external graphics into the final stream. The compositor route is the visual layout that RealtimeKit recording/export should capture.
+RealtimeKit records this URL and sends the result to the RTMP destination. The route renders the meeting view plus scoreboard, sponsor, ticker, logos, and external graphics layer.

@@ -2,7 +2,7 @@
 
 Source repo reviewed: `rahmatullahboss/Live-streaming-compositor`.
 
-## What was reused
+## Reused from source frontend
 
 - React Router route shape
 - Camera route idea
@@ -14,17 +14,22 @@ Source repo reviewed: `rahmatullahboss/Live-streaming-compositor`.
 - Scoreboard, logo, sponsor, ticker concepts
 - Cloudflare Worker style backend
 
-## What changed
+## Removed from source architecture
 
-The old repo used raw Cloudflare Realtime SFU plus browser-side mixing and a VPS relay with ffmpeg.
+The old source repo had raw SFU pull logic and a relay path. This repo does not use that path.
 
-This repo should move the backend flow to RealtimeKit:
+## Current architecture
 
-- RealtimeKit meeting creation
-- RealtimeKit participant tokens
-- RealtimeKit custom recording or livestream export
-- Custom compositor route as the recording layout URL
+RealtimeKit handles the live meeting, participant tokens, custom layout URL, and RTMP export.
 
-## Keep as fallback
+The custom layout route is:
 
-If RealtimeKit custom recording/export cannot support the production layout well enough, keep the old raw SFU plus relay design as fallback.
+```txt
+/compositor/:eventId?token=RECORDER_TOKEN
+```
+
+The backend starts export with:
+
+```txt
+POST /api/events/:eventId/recording/start
+```

@@ -2,11 +2,12 @@
   "name": "live-streaming-realtimekit",
   "private": true,
   "version": "0.1.0",
-  "description": "Browser/mobile-first live production system with RealtimeKit, cloud compositor, and RTMP export.",
+  "description": "Mobile browser live production system with RealtimeKit, custom recording layout, and RTMP export.",
   "scripts": {
     "dev": "pnpm --filter web dev",
     "build": "pnpm --filter web build",
-    "lint": "pnpm --filter web lint"
+    "lint": "pnpm --filter web lint",
+    "typecheck": "pnpm --filter web typecheck"
   },
   "packageManager": "pnpm@9.0.0",
   "workspaces": [

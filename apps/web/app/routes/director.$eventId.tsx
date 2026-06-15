@@ -1,7 +1,9 @@
+import { useSearchParams } from "react-router";
 import { RealtimeKitJoin } from "../components/RealtimeKitJoin";
 
 export default function DirectorRoute() {
-  const token = typeof window === "undefined" ? "" : new URLSearchParams(window.location.search).get("token") ?? "";
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token") ?? "";
 
   if (!token) {
     return (

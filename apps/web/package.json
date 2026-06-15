@@ -14,11 +14,11 @@
     "@cloudflare/realtimekit-react": "latest",
     "@cloudflare/realtimekit-react-ui": "latest",
     "@cloudflare/realtimekit-ui": "latest",
-    "@livestream/overlay-engine": "workspace:*",
-    "@livestream/shared": "workspace:*",
     "next": "latest",
+    "overlay-engine": "workspace:*",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "shared": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "latest",

@@ -1,11 +1,14 @@
 # Web App
 
-Frontend workspace for the MVP.
+React Router + Vite frontend and Cloudflare Worker backend for the live streaming MVP.
 
-Planned screens:
+Main routes:
 
-- Camera page
-- Director page
-- Program page
+- /camera
+- /director/:eventId
+- /compositor/:eventId
+- /score/:eventId
 
-This folder will contain the Next.js app.
+Backend entry:
+
+- workers/app.ts

@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect } from "react";
 import { RealtimeKitProvider, useRealtimeKitClient } from "@cloudflare/realtimekit-react";
 import { RtkMeeting } from "@cloudflare/realtimekit-react-ui";
@@ -8,9 +6,10 @@ type Props = {
   authToken: string;
   audio?: boolean;
   video?: boolean;
+  showSetupScreen?: boolean;
 };
 
-export function RealtimeKitJoin({ authToken, audio = true, video = true }: Props) {
+export function RealtimeKitJoin({ authToken, audio = true, video = true, showSetupScreen = true }: Props) {
   const [meeting, initMeeting] = useRealtimeKitClient();
 
   useEffect(() => {
@@ -22,7 +21,7 @@ export function RealtimeKitJoin({ authToken, audio = true, video = true }: Props
 
   return (
     <RealtimeKitProvider value={meeting}>
-      <RtkMeeting meeting={meeting} mode="fill" showSetupScreen />
+      <RtkMeeting meeting={meeting} mode="fill" showSetupScreen={showSetupScreen} />
     </RealtimeKitProvider>
   );
 }

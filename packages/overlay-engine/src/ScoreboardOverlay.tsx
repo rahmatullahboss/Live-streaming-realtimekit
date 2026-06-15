@@ -1,4 +1,4 @@
-import type { OverlayConfig } from "shared/src";
+import type { OverlayConfig } from "shared";
 import { getExternalOverlayUrls } from "./external-overlays";
 
 export function ScoreboardOverlay({ overlay }: { overlay: OverlayConfig }) {
